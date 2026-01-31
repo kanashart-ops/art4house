@@ -1,6 +1,6 @@
 # Art for House 🎨
 
-**Art for House** is a mobile application built with **Expo + React Native** that allows users to try artworks directly in their interior using a phone camera or a photo.
+Art for House is a mobile application built with **Expo + React Native** that allows users to try artworks directly in their interior using a phone camera or a photo.
 
 This project is part of my learning and portfolio journey as a front-end / mobile developer. The main focus is UI/UX, gestures, performance and real-world app structure.
 
@@ -34,16 +34,7 @@ Install dependencies:
 ```bash
 npm install
 
+Start the app:
+
+```bash
 npx expo start
-
-📌 Project Status
-
-Actively developed
-
-Focused on UI/UX improvements
-
-Refactoring and structure optimization in progress
-
-Android-first (iOS support optional)
-
-   
