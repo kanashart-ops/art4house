@@ -1,50 +1,49 @@
-# Welcome to your Expo app 👋
+# Art for House 🎨
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Art for House** is a mobile application built with **Expo + React Native** that allows users to try artworks directly in their interior using a phone camera or a photo.
 
-## Get started
+This project is part of my learning and portfolio journey as a front-end / mobile developer. The main focus is UI/UX, gestures, performance and real-world app structure.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Features
 
-2. Start the app
+- Upload or take a photo of a room
+- Try artworks on a wall in real time
+- Move, resize and zoom artworks
+- Save preview images to the device
+- Simple and focused user experience
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🧠 Tech Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Expo
+- React Native
+- TypeScript
+- Expo Router
+- React Native Gesture Handler
+- Reanimated
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 🛠 Getting Started
 
-When you're ready, run:
+Install dependencies:
 
 ```bash
-npm run reset-project
-```
+npm install
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+npx expo start
 
-## Learn more
+📌 Project Status
 
-To learn more about developing your project with Expo, look at the following resources:
+Actively developed
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Focused on UI/UX improvements
 
-## Join the community
+Refactoring and structure optimization in progress
 
-Join our community of developers creating universal apps.
+Android-first (iOS support optional)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+   
