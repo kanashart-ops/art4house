@@ -1,9 +1,9 @@
-// app/(tabs)/tryon.tsx
+// app/tryon.tsx
 import Slider from "@react-native-community/slider";
 import { useFocusEffect } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import { useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -23,25 +23,49 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import { SafeAreaView } from "react-native-safe-area-context";
 import ViewShot from "react-native-view-shot";
 
-import art1 from "../../assets/art1.jpg";
-import art10 from "../../assets/art10.jpg";
-import art11 from "../../assets/art11.jpg";
-import art12 from "../../assets/art12.jpg";
-import art13 from "../../assets/art13.jpg";
-import art14 from "../../assets/art14.jpg";
-import art15 from "../../assets/art15.jpg";
-import art16 from "../../assets/art16.jpg";
-import art17 from "../../assets/art17.jpg";
-import art18 from "../../assets/art18.jpg";
-import art19 from "../../assets/art19.jpg";
-import art2 from "../../assets/art2.jpg";
-import art3 from "../../assets/art3.jpg";
-import art4 from "../../assets/art4.jpg";
-import art5 from "../../assets/art5.jpg";
-import art6 from "../../assets/art6.jpg";
-import art7 from "../../assets/art7.jpg";
-import art8 from "../../assets/art8.jpg";
-import art9 from "../../assets/art9.jpg";
+
+import art1 from "../assets/art1.jpg";
+import art10 from "../assets/art10.jpg";
+import art11 from "../assets/art11.jpg";
+import art12 from "../assets/art12.jpg";
+import art13 from "../assets/art13.jpg";
+import art14 from "../assets/art14.jpg";
+import art15 from "../assets/art15.jpg";
+import art16 from "../assets/art16.jpg";
+import art17 from "../assets/art17.jpg";
+import art18 from "../assets/art18.jpg";
+import art19 from "../assets/art19.jpg";
+import art2 from "../assets/art2.jpg";
+import art3 from "../assets/art3.jpg";
+import art4 from "../assets/art4.jpg";
+import art5 from "../assets/art5.jpg";
+import art6 from "../assets/art6.jpg";
+import art7 from "../assets/art7.jpg";
+import art8 from "../assets/art8.jpg";
+import art9 from "../assets/art9.jpg";
+import fon1 from "../assets/fon (1).jpg";
+import fon10 from "../assets/fon (10).jpg";
+import fon11 from "../assets/fon (11).jpg";
+import fon12 from "../assets/fon (12).jpg";
+import fon13 from "../assets/fon (13).jpg";
+import fon14 from "../assets/fon (14).jpg";
+import fon15 from "../assets/fon (15).jpg";
+import fon16 from "../assets/fon (16).jpg";
+import fon17 from "../assets/fon (17).jpg";
+import fon18 from "../assets/fon (18).jpg";
+import fon19 from "../assets/fon (19).jpg";
+import fon2 from "../assets/fon (2).jpg";
+import fon20 from "../assets/fon (20).jpg";
+import fon21 from "../assets/fon (21).jpg";
+import fon22 from "../assets/fon (22).jpg";
+import fon23 from "../assets/fon (23).jpg";
+import fon3 from "../assets/fon (3).jpg";
+import fon4 from "../assets/fon (4).jpg";
+import fon5 from "../assets/fon (5).jpg";
+import fon6 from "../assets/fon (6).jpg";
+import fon7 from "../assets/fon (7).jpg";
+import fon8 from "../assets/fon (8).jpg";
+import fon9 from "../assets/fon (9).jpg";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const IMAGE_SIZE = 80;
@@ -89,26 +113,46 @@ const SAMPLE_ARTS: ArtItem[] = [
   createArt("17", "Картина 17", art17),
   createArt("18", "Картина 18", art18),
   createArt("19", "Картина 19", art19),
+  ];
+// --- тип фона ---
+type BgItem = {
+  id: string;
+  title: string;
+  uri: string;
+};
+
+function createBg(id: string, title: string, asset: any): BgItem {
+  const src = Image.resolveAssetSource(asset);
+  return { id, title, uri: src.uri };
+}
+
+const SAMPLE_FONS: BgItem[] = [
+  createBg("1", "Фон 1", fon1),
+  createBg("2", "Фон 2", fon2),
+  createBg("3", "Фон 3", fon3),
+  createBg("4", "Фон 4", fon4),
+  createBg("5", "Фон 5", fon5),
+  createBg("6", "Фон 6", fon6),
+  createBg("7", "Фон 7", fon7),
+  createBg("8", "Фон 8", fon8),
+  createBg("9", "Фон 9", fon9),
+  createBg("10", "Фон 10", fon10),
+  createBg("11", "Фон 11", fon11),
+  createBg("12", "Фон 12", fon12),
+  createBg("13", "Фон 13", fon13),
+  createBg("14", "Фон 14", fon14),
+  createBg("15", "Фон 15", fon15),
+  createBg("16", "Фон 16", fon16),
+  createBg("17", "Фон 17", fon17),
+  createBg("18", "Фон 18", fon18),
+  createBg("19", "Фон 19", fon19),
+  createBg("20", "Фон 20", fon20),
+  createBg("21", "Фон 21", fon21),
+  createBg("22", "Фон 22", fon22),
+  createBg("23", "Фон 23", fon23),
 ];
 
-// плавающий таббар (чуть выше системных кнопок) — это стиль "по умолчанию" для возврата назад
-const BASE_TABBAR_STYLE = {
-  backgroundColor: "#fff",
-  borderTopColor: "transparent",
-  position: "absolute" as const,
-  left: 16,
-  right: 16,
-  bottom: 18,
-  height: 64,
-  borderRadius: 16,
-  paddingBottom: 10,
-  paddingTop: 6,
-  elevation: 10,
-  shadowColor: "#000",
-  shadowOpacity: 0.12,
-  shadowRadius: 6,
-  shadowOffset: { width: 0, height: 2 },
-} as const;
+const DEFAULT_BG_URI = Image.resolveAssetSource(fon1).uri;
 
 // ✅ круговой список (плюсик как обычный item)
 type ArtRow =
@@ -120,20 +164,86 @@ const LOOP_MULT = 5;
 const LOOP_ITEM_H = 78;
 
 export default function TryOn() {
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<string>(DEFAULT_BG_URI);
   const [selectedArt, setSelectedArt] = useState<ArtItem | null>(null);
+
+  // ✅ модалка выбора встроенных фонов
+  const [bgPickerOpen, setBgPickerOpen] = useState(false);
+
+  // ✅ чтобы Alert "Фон или Картина" показывался один раз на вход
+  const didAskEntryChoiceRef = useRef(false);
+
+  // ✅ открыть встроенный пикер фонов (одна строка)
+  const openBuiltInBgPicker = () => setBgPickerOpen(true);
+
+
+
+
+  // ✅ params с главной: paintingId="art13", bgId="fon7"
+ const params = useLocalSearchParams<{
+  paintingId?: string;
+  bgId?: string;
+}>();
+  const normalizeArtId = (id?: string) => {
+    if (!id) return undefined;
+    // "art13" -> "13"
+    const m = String(id).match(/\d+/);
+    return m ? m[0] : String(id);
+  };
+
+  const normalizeBgId = (id?: string) => {
+    if (!id) return undefined;
+    // "fon7" -> "7"
+    const m = String(id).match(/\d+/);
+    return m ? m[0] : String(id);
+  };
+
+  // ✅ применяем выбор с главной (фон/картина)
+  useEffect(() => {
+    const bgKey = normalizeBgId(params.bgId);
+    const artKey = normalizeArtId(params.paintingId);
+
+    // Если пришли параметры — никаких алертов "Фон или картина"
+    if (bgKey || artKey) {
+      didAskEntryChoiceRef.current = true;
+    }
+
+    // 1) фон: если пришёл bgId — ставим конкретный, иначе ставим дефолт
+    if (bgKey) {
+      const bg = SAMPLE_FONS.find((b) => b.id === bgKey);
+      if (bg) setBackgroundImage(bg.uri);
+      else setBackgroundImage(DEFAULT_BG_URI);
+    } else {
+  setBackgroundImage(DEFAULT_BG_URI);
+}
+
+    // 2) картина: если пришёл paintingId — ставим её
+    if (artKey) {
+      const art = SAMPLE_ARTS.find((a) => a.id === artKey);
+      if (art) {
+        setSelectedArt(art);
+        // можно сразу открыть панель (если хочешь)
+        // setBottomPanelOpen(true);
+      }
+    }
+  }, [params.bgId, params.paintingId]);
+
+
   const [activeLayerState, setActiveLayerState] = useState<"art" | "wall">("art");
 
   // ✅ ориентация только по кнопке
   const [isLandscape, setIsLandscape] = useState(false);
 
+  // что сейчас показываем в нижней панели: картины или фоны
+  const [panelMode, setPanelMode] = useState<"arts" | "bg">("arts");
+
   // портретная нижняя панель
   const [bottomPanelOpen, setBottomPanelOpen] = useState(false);
 
-  // ✅ ВОТ ЭТО ВЕРНУЛ: 3D в портрете (в панели инструментов)
+  // 3D в портрете (в панели инструментов)
   const [showPerspectivePanelPortrait, setShowPerspectivePanelPortrait] = useState(false);
 
-  // ✅ 3D слева в ландшафте
+  // 3D слева в ландшафте
   const [landscape3DOpen, setLandscape3DOpen] = useState(false);
 
   const [isCapturing, setIsCapturing] = useState(false);
@@ -141,9 +251,9 @@ export default function TryOn() {
   // ✅ Список картин в state (чтобы добавлять пользовательские)
   const [arts, setArts] = useState<ArtItem[]>(SAMPLE_ARTS);
 
-  // ✅ значения слайдеров (перспектива) — одни и те же для портрета/ландшафта
-  const [perspX, setPerspX] = useState(0); // -0.8..0.8
-  const [perspY, setPerspY] = useState(0); // -0.8..0.8
+  // ✅ значения слайдеров (перспектива)
+  const [perspX, setPerspX] = useState(0);
+  const [perspY, setPerspY] = useState(0);
 
   const navigation = useNavigation();
   const activeLayer = useSharedValue<"art" | "wall">("art");
@@ -151,21 +261,6 @@ export default function TryOn() {
 
   // ✅ круговой список справа (ref)
   const rightListRef = useRef<FlatList<ArtRow> | null>(null);
-
-  // ✅ СКРЫВАЕМ tabBar в примерочной полностью (и возвращаем обратно при уходе)
-  useFocusEffect(
-    useCallback(() => {
-      navigation.setOptions({
-        tabBarStyle: { display: "none" },
-      });
-
-      return () => {
-        navigation.setOptions({
-          tabBarStyle: BASE_TABBAR_STYLE,
-        });
-      };
-    }, [navigation])
-  );
 
   // ✅ при входе: жёстко PORTRAIT (чтобы само не вертелось)
   useFocusEffect(
@@ -184,7 +279,6 @@ export default function TryOn() {
       };
     }, [])
   );
-
   // трансформации для картины
   const artTranslateX = useSharedValue(0);
   const artTranslateY = useSharedValue(0);
@@ -757,75 +851,128 @@ export default function TryOn() {
   };
 
   // ====== портрет нижняя панель ======
-  const renderBottomPanel = () => {
-    if (!bottomPanelOpen) return null;
+const renderBottomPanel = () => {
+  if (!bottomPanelOpen) return null;
 
-    return (
-      <View style={styles.bottomPanel}>
-        <View style={styles.bottomTabsRow}>
-          <Text style={styles.bottomTitle}>Инструменты</Text>
-
-          <TouchableOpacity onPress={() => setBottomPanelOpen(false)} style={styles.bottomCloseBtn}>
-            <Text style={styles.bottomCloseText}>✕</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.toolsRow}>
-          <TouchableOpacity onPress={resetTransform} style={styles.toolsBtn}>
-            <Text style={styles.toolsBtnText}>Сброс</Text>
-          </TouchableOpacity>
-
-          {/* ✅ ВЕРНУЛИ 3D В ПОРТРЕТНУЮ ПАНЕЛЬ */}
+  const renderArtsList = () => (
+    <FlatList
+      data={arts}
+      horizontal
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.thumbsContainerPortrait}
+      ListHeaderComponent={renderPlusThumbPortrait}
+      renderItem={({ item }) => {
+        const isActive = selectedArt?.id === item.id;
+        return (
           <TouchableOpacity
-            onPress={() => setShowPerspectivePanelPortrait((p) => !p)}
-            style={styles.toolsBtn}
+            onPress={() => {
+              setSelectedArt(item);
+
+              artTranslateX.value = withTiming(0);
+              artTranslateY.value = withTiming(0);
+              artScale.value = withTiming(1);
+              artRotation.value = withTiming(0);
+              artRotateX.value = withTiming(0);
+              artRotateY.value = withTiming(0);
+
+              setPerspX(0);
+              setPerspY(0);
+            }}
+            style={{ marginRight: 8 }}
           >
-            <Text style={styles.toolsBtnText}>3D</Text>
+            <Image
+              source={{ uri: item.uri }}
+              style={{
+                width: IMAGE_SIZE,
+                height: IMAGE_SIZE,
+                borderRadius: 8,
+                borderWidth: isActive ? 2 : 0,
+                borderColor: "#007AFF",
+              }}
+            />
           </TouchableOpacity>
-        </View>
+        );
+      }}
+    />
+  );
 
-        <FlatList
-          data={arts}
-          horizontal
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.thumbsContainerPortrait}
-          ListHeaderComponent={renderPlusThumbPortrait}
-          renderItem={({ item }) => {
-            const isActive = selectedArt?.id === item.id;
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  setSelectedArt(item);
+  const renderBgList = () => (
+    <FlatList
+      data={SAMPLE_FONS}
+      horizontal
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.thumbsContainerPortrait}
+      renderItem={({ item }) => {
+        const isActive = backgroundImage === item.uri;
+        return (
+          <TouchableOpacity
+            onPress={() => {
+              setBackgroundImage(item.uri);
+              resetTransform(); // чтобы фон/картина не “улетали”
+            }}
+            style={{ marginRight: 8 }}
+            activeOpacity={0.85}
+          >
+            <Image
+              source={{ uri: item.uri }}
+              style={{
+                width: IMAGE_SIZE,
+                height: IMAGE_SIZE,
+                borderRadius: 8,
+                borderWidth: isActive ? 2 : 0,
+                borderColor: "#007AFF",
+              }}
+            />
+          </TouchableOpacity>
+        );
+      }}
+    />
+  );
 
-                  artTranslateX.value = withTiming(0);
-                  artTranslateY.value = withTiming(0);
-                  artScale.value = withTiming(1);
-                  artRotation.value = withTiming(0);
-                  artRotateX.value = withTiming(0);
-                  artRotateY.value = withTiming(0);
+  return (
+    <View style={styles.bottomPanel}>
+      <View style={styles.bottomTabsRow}>
+        <Text style={styles.bottomTitle}>Инструменты</Text>
 
-                  setPerspX(0);
-                  setPerspY(0);
-                }}
-                style={{ marginRight: 8 }}
-              >
-                <Image
-                  source={{ uri: item.uri }}
-                  style={{
-                    width: IMAGE_SIZE,
-                    height: IMAGE_SIZE,
-                    borderRadius: 8,
-                    borderWidth: isActive ? 2 : 0,
-                    borderColor: "#007AFF",
-                  }}
-                />
-              </TouchableOpacity>
-            );
-          }}
-        />
+        <TouchableOpacity onPress={() => setBottomPanelOpen(false)} style={styles.bottomCloseBtn}>
+          <Text style={styles.bottomCloseText}>✕</Text>
+        </TouchableOpacity>
       </View>
-    );
-  };
+
+      {/* ✅ 4 кнопки: Картины → Фоны → 3D → Сброс */}
+      <View style={styles.toolsRow}>
+        <TouchableOpacity
+          onPress={() => setPanelMode("arts")}
+          style={[styles.toolsBtn, panelMode === "arts" && styles.toolsBtnActive]}
+        >
+          <Text style={styles.toolsBtnText}>Картины</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setPanelMode("bg")}
+          style={[styles.toolsBtn, panelMode === "bg" && styles.toolsBtnActive]}
+        >
+          <Text style={styles.toolsBtnText}>Фоны</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setShowPerspectivePanelPortrait((p) => !p)}
+          style={styles.toolsBtn}
+        >
+          <Text style={styles.toolsBtnText}>3D</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={resetTransform} style={styles.toolsBtn}>
+          <Text style={styles.toolsBtnText}>Сброс</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* ✅ ниже показываем нужный список */}
+      {panelMode === "arts" ? renderArtsList() : renderBgList()}
+    </View>
+  );
+};
+
 
   const renderThumbnailsPortrait = () => (
     <>
@@ -972,6 +1119,66 @@ export default function TryOn() {
       <SafeAreaView style={styles.container}>
         <View style={styles.landscapeWrapper}>
           {renderStageContent()}
+{/* ✅ Модалка выбора встроенных фонов */}
+<Animated.View>
+  {/* оставил Animated.View просто чтобы не ругалось на порядок слоёв, можно и без него */}
+</Animated.View>
+
+<View style={{ position: "absolute" }}>
+  {/* пустышка, не трогай */}
+</View>
+
+{bgPickerOpen && (
+  <View style={styles.bgModalBackdrop}>
+    <View style={styles.bgModalCard}>
+      <View style={styles.bgModalHeader}>
+        <Text style={styles.bgModalTitle}>Выберите фон</Text>
+
+        <TouchableOpacity
+          onPress={() => {
+            setBgPickerOpen(false);
+            pickBackground(); // галерея/камера
+          }}
+          style={styles.bgModalHeaderBtn}
+        >
+          <Text style={styles.bgModalHeaderBtnText}>Галерея/Камера</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setBgPickerOpen(false)} style={styles.bgModalCloseBtn}>
+          <Text style={styles.bgModalCloseText}>✕</Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={SAMPLE_FONS}
+        keyExtractor={(item) => item.id}
+        numColumns={3}
+        contentContainerStyle={styles.bgGrid}
+        renderItem={({ item }) => {
+          const isActive = backgroundImage === item.uri;
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                setBackgroundImage(item.uri);
+                // если выбрали фон — картину НЕ выбираем автоматически
+                // setSelectedArt(null); // хочешь жёстко сбрасывать — раскомментируй
+                resetTransform();
+                setBgPickerOpen(false);
+              }}
+              style={styles.bgCell}
+              activeOpacity={0.85}
+            >
+              <Image
+                source={{ uri: item.uri }}
+                style={[styles.bgThumb, isActive && styles.bgThumbActive]}
+              />
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </View>
+  </View>
+)}
 
           {/* справа: круговой список картин */}
           <View style={styles.overlayRightColumn}>
@@ -1411,4 +1618,81 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   landscape3DCloseText: { color: "#fff", fontWeight: "900", fontSize: 12 },
+  // ====== MODAL ФОНОВ ======
+  bgModalBackdrop: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.65)",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 14,
+    zIndex: 9999,
+  },
+  bgModalCard: {
+    width: "100%",
+    maxWidth: 520,
+    borderRadius: 14,
+    backgroundColor: "rgba(0,0,0,0.92)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.14)",
+    padding: 12,
+  },
+  bgModalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 10,
+  },
+  bgModalTitle: {
+    color: "#fff",
+    fontWeight: "900",
+    fontSize: 13,
+    flex: 1,
+  },
+  bgModalHeaderBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.10)",
+  },
+  bgModalHeaderBtnText: {
+    color: "#fff",
+    fontWeight: "800",
+    fontSize: 12,
+  },
+  bgModalCloseBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(255,255,255,0.10)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bgModalCloseText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "900",
+  },
+  bgGrid: {
+    paddingBottom: 8,
+  },
+  bgCell: {
+    width: "33.33%",
+    padding: 6,
+  },
+  bgThumb: {
+    width: "100%",
+    aspectRatio: 1,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.18)",
+  },
+  bgThumbActive: {
+    borderColor: "#007AFF",
+    borderWidth: 2,
+  },
+
 });

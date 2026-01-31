@@ -1,4 +1,4 @@
-// app/(tabs)/gallery.tsx
+// app/gallery.tsx
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -12,8 +12,8 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
   useWindowDimensions,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -30,15 +30,8 @@ import Animated, {
 import * as FileSystem from "expo-file-system/legacy";
 import * as MediaLibrary from "expo-media-library";
 
-const API_BASE_URL = "https://artforhouse.by";
-const GALLERY_URL = `${API_BASE_URL}/api/mobile-gallery`;
-
-type MobileArtItem = {
-  id: string;
-  title: string;
-  imageUrl: string;
-  category: string;
-};
+// ✅ общий модуль API
+import { fetchMobileGallery, MobileArtItem } from "../lib/mobileGallery";
 
 const TOP_BAR_HEIGHT = 64;
 
@@ -149,9 +142,7 @@ export default function GalleryScreen() {
   const loadGallery = useCallback(async () => {
     try {
       setError(null);
-      const res = await fetch(GALLERY_URL);
-      if (!res.ok) throw new Error(`Status ${res.status}`);
-      const data = (await res.json()) as MobileArtItem[];
+      const data = await fetchMobileGallery();
       setItems(data);
     } catch (e) {
       console.warn(e);
@@ -229,8 +220,7 @@ export default function GalleryScreen() {
         return;
       }
 
-      const extFromUrl =
-        (current.imageUrl.split("?")[0].split(".").pop() || "jpg").toLowerCase();
+      const extFromUrl = (current.imageUrl.split("?")[0].split(".").pop() || "jpg").toLowerCase();
       const safeExt =
         extFromUrl === "jpeg" || extFromUrl === "jpg" || extFromUrl === "png" ? extFromUrl : "jpg";
 
@@ -405,7 +395,11 @@ export default function GalleryScreen() {
       onPress={() => handleOpenFullscreen(index)}
     >
       <View style={{ aspectRatio: 4 / 5, backgroundColor: "#ddd" }}>
-        <Image source={{ uri: item.imageUrl }} style={{ width: "100%", height: "100%" }} resizeMode="cover" />
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={{ width: "100%", height: "100%" }}
+          resizeMode="cover"
+        />
       </View>
       <View style={{ paddingHorizontal: 10, paddingVertical: 8 }}>
         <Text style={{ fontSize: 12, color: "#777" }} numberOfLines={1}>
@@ -447,7 +441,11 @@ export default function GalleryScreen() {
 
       {/* Категории */}
       <View style={{ paddingHorizontal: 8, paddingTop: 8, paddingBottom: 4 }}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 4 }}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 4 }}
+        >
           {categories.map((cat) => {
             const isActive = selectedCategory === cat;
             return (
